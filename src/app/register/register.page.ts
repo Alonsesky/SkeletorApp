@@ -41,7 +41,16 @@ export class RegisterPage implements OnInit {
     async onSubmit(){
     //Verificar datos de login
       var form = this.registerForm.value;
-      if(this.registerForm.invalid){
+      if (form.usuario.length>8 || form.usuario.length<3) {
+        const alert = await this.alertController.create({
+          header: 'Datos incorrectos',
+          message: 'User debe ser entre 3-8 dígitos mientras que el password mínimo 3 dígitos.',
+          buttons: ['Aceptar']
+        });
+        await alert.present();
+        return;
+      
+      } else if(this.registerForm.invalid){
         const alert = await this.alertController.create({
           header: 'Datos incompletos',
           message: 'Debe llenar todos los datos.',
@@ -50,12 +59,12 @@ export class RegisterPage implements OnInit {
         await alert.present();
         return;
       } 
-        var user = {
-          usuario: form.usuario,
-          password: form.password
-        }
-        localStorage.setItem('user',JSON.stringify(user));
-        
+      var user = {
+        usuario: form.usuario,
+        password: form.password
+      }
+      localStorage.setItem('user',JSON.stringify(user));
+      
     
     }
 }
