@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validator, FormControl, Validators } from '@angular/forms';
-import { Animation, AnimationController, IonCard, IonTitle } from '@ionic/angular';
+import { AlertController, Animation, AnimationController, IonCard, IonTitle } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -13,9 +13,10 @@ export class RegisterPage implements OnInit {
   card!: ElementRef<HTMLIonCardElement>;
   private animation!: Animation;
 
-  constructor(public fb: FormBuilder, private animationCtrl: AnimationController) { 
+  constructor(public fb: FormBuilder, private animationCtrl: AnimationController,
+    public alertController: AlertController) { 
     this.registerForm = this.fb.group({
-      'name' : new FormControl('',Validators.required),
+      'usuario' : new FormControl('',Validators.required),
       'password': new FormControl('',Validators.required),
       'confirmPassword': new FormControl('',Validators.required)
     })
@@ -23,10 +24,6 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
   
-  }
-
-  play() {
-    this.animation.play();
   }
 
   ngAfterViewInit(){
@@ -37,10 +34,28 @@ export class RegisterPage implements OnInit {
       .iterations(Infinity)
       .direction('alternate')
       .fromTo('background', 'blue', 'var(--background)');
-  }
-
-  guardarRegistro(){
+      this.animation.play();
 
   }
 
+    async onSubmit(){
+    //Verificar datos de login
+      var form = this.registerForm.value;
+      if(this.registerForm.invalid){
+        const alert = await this.alertController.create({
+          header: 'Datos incompletos',
+          message: 'Debe llenar todos los datos.',
+          buttons: ['Aceptar']
+        });
+        await alert.present();
+        return;
+      } 
+        var user = {
+          usuario: form.usuario,
+          password: form.password
+        }
+        localStorage.setItem('user',JSON.stringify(user));
+        
+    
+    }
 }

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Animation, AnimationController, IonCard, IonCardTitle, IonTitle } from '@ionic/angular';
 
 @Component({
@@ -12,11 +13,12 @@ export class LoginPage implements OnInit {
   title!: ElementRef<HTMLIonCardElement>;
   animation!: Animation;
   formLogin: FormGroup;
-  
+  usuario: String = '';
+  password:String='';
 
-  constructor(private animationCtrl: AnimationController, public fb: FormBuilder) {
+  constructor(private animationCtrl: AnimationController, public fb: FormBuilder, public router: Router) {
     this.formLogin = this.fb.group({
-      'nombre': new FormControl("", Validators.required),
+      'usuario': new FormControl("", Validators.required),
       'password': new FormControl("", Validators.required)
     });
   }
@@ -24,9 +26,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
   }
-
-  //Verificar datos de login
-  verificarLogin(){}
 
   ngAfterViewInit() {
     this.animation = this.animationCtrl
@@ -39,4 +38,23 @@ export class LoginPage implements OnInit {
     this.animation.play();
   }
 
+  //Verificar datos de login
+  verificarLogin(){
+    var form = this.formLogin.value;
+    var user = localStorage.getItem('user');
+    
+    if (user!==null) {
+      var userItems = JSON.parse(user);
+      if (userItems.usuario == form.usuario && userItems.password == form.password) {
+        this.router.navigate(['/home']);
+        
+      }
+    }
+  }
+
+  //Limpiar inputs
+  limpiarInputs(){
+    this.usuario = '';
+    this.password= '';
+  }
 }
