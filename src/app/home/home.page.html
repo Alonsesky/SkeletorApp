@@ -12,43 +12,54 @@
       <ion-title size="large">Bienvenido</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  
   <ion-card>
     <ion-header>
       <ion-toolbar>
         <ion-title>Información Adicional</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-grid [fixed]="true">
-      <ion-row>
-        <ion-col>
-          <ion-input  label="Nombre: " type="text" placeholder="Ingresar Nombre"></ion-input>
-        </ion-col>
-      </ion-row>
-      <br>
-      <ion-row>
-        <ion-col>
-          <ion-input  label="Apellido: " type="text" placeholder="Ingresar Apellido"></ion-input>
-        </ion-col>
-      </ion-row>
-      <br>
-      <ion-row>
-        <ion-col>
-          <ion-select label="Nivel de Educación" interface="popover" placeholder="Seleccione el nivel">
-            <ion-select-option value="apples">Básica</ion-select-option>
-            <ion-select-option value="oranges">Media</ion-select-option>
-            <ion-select-option value="bananas">Superior</ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-      <br>
-      <ion-row>
-        <ion-col size="12">
-          <ion-datetime size="cover" presentation="date"></ion-datetime>
-        </ion-col>
-      </ion-row>
-      <br>
-    </ion-grid>
+    <form [formGroup]="formHome" (ngSubmit)="onSubmit()">
+      <ion-grid [fixed]="true">
+        <ion-row>
+          <ion-col>
+            <ion-input [(ngModel)]="name" formControlName="name" label="Nombre: " type="text" placeholder="Ingresar Nombre"></ion-input>
+          </ion-col>
+        </ion-row>
+        <br>
+        <ion-row>
+          <ion-col>
+            <ion-input [(ngModel)]="lastName" formControlName="lastName" label="Apellido: " type="text" placeholder="Ingresar Apellido"></ion-input>
+          </ion-col>
+        </ion-row>
+        <br>
+        <ion-row>
+          <ion-col>
+            <ion-select [(ngModel)]="education" formControlName="education" label="Nivel de Educación" interface="popover" placeholder="Seleccione el nivel">
+              <ion-select-option value="apples">Básica</ion-select-option>
+              <ion-select-option value="oranges">Media</ion-select-option>
+              <ion-select-option value="bananas">Superior</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <br>
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="date" [formControlName]="date">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button (click)="limpiar()" shape="round">Limpiar</ion-button>
+            <ion-button (click)="onSubmit()" shape="round">Mostrar</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
   </ion-card>
 </ion-content>

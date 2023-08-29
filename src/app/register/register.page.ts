@@ -61,10 +61,19 @@ export class RegisterPage implements OnInit {
       } 
       var user = {
         usuario: form.usuario,
-        password: form.password
+        password: form.password,
+        name: '',
+        lastName: '',
+        education:'',
+        
       }
       localStorage.setItem('user',JSON.stringify(user));
-      
-    
+      const alert = await this.alertController.create({
+        header: 'Datos Registrados',
+        message: 'Se añadió con éxito.',
+        buttons: ['Aceptar']
+      });
+      await alert.present();
+      return;
     }
 }
