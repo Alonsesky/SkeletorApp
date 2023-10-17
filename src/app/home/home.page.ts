@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { AlertController, AnimationController } from '@ionic/angular';
+import { LocationService } from '../services/location.service';
+import { Region } from '../models/region';
+import { Comuna } from '../models/comuna';
 
 
 @Component({
@@ -11,20 +14,50 @@ import { AlertController, AnimationController } from '@ionic/angular';
 })
 export class HomePage {
 
-  
+
   formHome: FormGroup;
   name: String = '';
   lastName:String= '';
   education: String = '';
   date!: null;
+  regiones:Region[]=[];
+  comunas:Comuna[]=[];
+  regionSel:number = 0;
+  comunaSel:number = 0;
+  activeComuna:boolean = true;
 
-  constructor( public alertController: AlertController, private animationCtrl: AnimationController, public fb: FormBuilder, public router: Router) {
+  constructor(
+    public alertController: AlertController,
+    private animationCtrl: AnimationController,
+    public fb: FormBuilder,
+    public router: Router,
+    private locationService:LocationService
+    ){
     this.formHome = this.fb.group({
       'name': new FormControl("", Validators.required),
       'lastName': new FormControl("", Validators.required),
       'education': new FormControl("", Validators.required),
-      'date': new FormControl("", Validators.required)
+      'date': new FormControl("", Validators.required),
+      'regionSel': new FormControl("", Validators.required),
+      'comunaSel': new FormControl("", Validators.required)
     });
+  }
+
+  ngOnInit(){
+    this.cargarRegion();
+    console.log(this.regionSel);
+
+  }
+
+  async cargarRegion(){
+    const req = await this.locationService.getRegion();
+    this.regiones = req.data;
+  }
+
+  async cargarComuna(){
+    this.activeComuna = false;
+    const req = await this.locationService.getComuna(this.regionSel)
+    this.comunas = req.data;
   }
 
   actualizarDatos(){
@@ -32,7 +65,7 @@ export class HomePage {
   }
 
   mostrar(){
-    
+
   }
 
   async onSubmit(){
@@ -68,10 +101,10 @@ export class HomePage {
     }
 
 
-    
 
 
-    
+
+
   }
 
    //Limpiar inputs
